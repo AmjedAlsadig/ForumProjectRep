@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+    <hr class="mt-0 mb-4">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4>Write post</h4>
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-success" value="Submit">
+    </form>
+    <hr class="mt-0 mb-4">
+{% endblock %}

@@ -1,0 +1,36 @@
+<div class="col-12 my-3">
+<div class="card">
+    
+    {% if instance.image %}
+        <a href="{{ instance.get_absolute_url }}">
+        <img class="card-img-top" src="{{ instance.image.url }}" alt="{{ instance.title }} logo">
+        </a>
+    {% endif %}
+        
+    <div class="card-body">
+        <h4 class="card-title">{{ instance.auther }}</h4>
+        {{ instance.time|timesince }} ago
+        <p class="card-text">{{ instance.content|linebreaks|truncatewords:20 }}</p>
+        
+        {% if instance.slug is not None %}
+        <div class="row">
+            <div class="col-6 m-auto col-sm-4">
+                <p>{{ instance.view_count }} likes </p>
+            </div>
+            <div class="col-6 m-auto col-sm-4">
+                <form method="POST" action="{% url 'posts:like' %}">
+                    {% csrf_token %}
+                  <input type="hidden" name="like_post_slug" value="{{ instance.slug }}">
+                  <button class="btn btn-outline-success" type="submit">Like</button>
+                </form>
+            </div>
+            <div class="col-auto m-auto col-sm-4">
+                <a href="{{ instance.get_absolute_url }}" class="btn btn-warning m-3">comment</a>
+            </div>
+        </div>     
+        {% endif %}
+            
+        
+    </div>
+</div>
+</div>

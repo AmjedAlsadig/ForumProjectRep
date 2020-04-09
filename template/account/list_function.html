@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% url 'people' as people_url %}
+<div class="row">
+    <div class="col-10">
+    <h1>News Feed</h1>
+    </div>
+    <div class="col-12">
+        
+        {% if form %}
+            {% include 'snippets/Create_post.html' with form=form %}
+        {% endif %}
+            
+        
+    </div>
+</div>
+
+{% if  friend_list %}
+    <div class="row">
+        <div class="col-12">
+            <h4>Friends</h4>
+        </div>
+        {% for friend in friend_list %}
+            <div class="col-8">
+            <a href="{% url 'users_profile' pk=friend.pk %}"><p>{{ friend.username }}</p></a>
+            </div>
+        {% endfor %} 
+        <a href="{{ people_url }}"  class="page-link m-auto"><h4>Connent friends &raquo;</h4></a>
+    </div>
+{% else %}
+    <a href="{{ people_url }}"><h4>connent people</h4></a>
+{% endif %}
+
+{% if post_list %}
+    <div class="row">
+        {% for object in post_list %}
+        <div class="col-12">
+                {% include 'snippets/post_card.html' with instance=object %}
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    
+        
+{% endblock %}
+    

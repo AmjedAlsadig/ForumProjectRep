@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% include 'base/css.html' %}
+  <title>Forum</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <!-- <div class="alert alert-primary" role="alert">this is primary alert NAVBAR</div> -->{% include 'base/navbar.html' %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-2">
+          <div class="alert alert-secondary" role="alert">this is secondary alert Top</div>
+        </div>
+        <div class="col-10 col-lg-8 mx-auto">
+          <div class="alert alert-primary" role="alert" style="min-height: 550px;">BODY</div>
+        </div>
+        <div class="col-12 col-lg-2">
+          <div class="alert alert-secondary" role="alert">this is secondary alert bottm</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-primary" role="alert">this is primary alert FOOTER</div>
+        </div>
+      </div>
+    </div>
+    
+    {% include 'base/js.html' %}
+    </body>
+</html>

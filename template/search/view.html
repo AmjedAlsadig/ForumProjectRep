@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    
+    {% if users_query_list %}    
+        {% for object in users_query_list %}
+        <div class="col-12">
+        {{ object.username }}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p>No user with this username</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock  %}
+    

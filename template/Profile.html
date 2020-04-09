@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div class="row mb-5 alert-secondary">
+            
+            {% if avatar %}
+                <div class="col-6 col-md-2 col-lg-2">
+                    <img class="" src="{{ avatar }}" style="border-radius: 60px;width: 120px;height: 120px;">
+                </div>
+            {% endif %}
+            <div class="col-6 col-md-4 col-lg-4 my-auto">
+                <h4>{{ username }}</h4>
+            </div>
+            <div class="col-6 col-md-4 col-lg-4 ml-lg-auto">
+                {% if add %}
+                    <a href="{% url 'posts:alter_friend' pk=pk operation='add' %}">
+                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Add Friend</button>
+                    </a>
+                {% endif %}
+                {% if remove %}
+                    <a href="{% url 'posts:alter_friend' pk=pk operation='remove' %}">
+                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">remove Friend</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-5 alert-primary">
+            <div class="col-12 ">
+                <h4 class="p-auto">Friends</h4>
+            </div>
+                {% for friend in friend_list %}
+               <div class="col-6 col-md-5 col-lg-4"> {{ friend.username }} </div>
+            {% endfor %}
+            
+        </div>
+        <div class="row mb-3">
+            <h4>Posts</h4>
+            {% for post in posts %}
+                    {% include 'snippets/post_card.html' with instance=post %}
+            {% endfor %}   
+        </div>
+{% endblock  %}
+    

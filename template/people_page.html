@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% url 'users_profile' pk=user.pk as users_profile_url %}
+        <div class="row">
+            <h4>people to connect</h4>
+        </div>
+        
+        {% for user in people  %}
+            <div class="row"><a href="{% url 'users_profile' pk=user.pk %}">{{ user }}</a></div>
+        {% endfor %}
+{% endblock  %}

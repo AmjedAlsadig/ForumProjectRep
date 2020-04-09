@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+        <div class="row">
+            <div class="col-12">
+                <!-- <h1>this is function detail view</h1> -->
+
+                <h3>{{ object.title }}</h3>
+                {{ object.time|timesince }} ago
+                <p>{{ object.content }}</p>
+                <!-- <img src="{{ object.image }}" /> -->
+
+                {% if object.image %}
+                    <img src= '{{ object.image.url }}'' class="img-fluid" />
+                {% endif %}
+                <p> {{ like_count }} likes </p>
+            </div>          
+        </div>
+                
+                <div class="row">
+                    {% if Comment %}
+                    <div class="col-12">
+                        <h2>Comment</h2>
+                    </div>
+                    
+                    {% for counter in Comment  %}
+                    <div class="col-6 my-3">
+                        {% if counter.image %}
+                            <img src= '{{ counter.image.url }}'' class="img-fluid" style="max-width: 100%;max-height: 100%;" />
+                        {% endif %}
+                    </div>
+                    <div class="col-4 col-lg-2 my-auto">
+                        <h4>{{ counter.auther }}</h4>
+                    </div>
+                    <div class="col-10 col-lg-4 my-auto">
+                        <p>{{ counter.content }}</p> </br>
+                    </div>
+                    
+                    {% endfor %}
+                {% endif %}
+                <div class="col-12  m-auto">
+                    {% include 'snippets/Create_comment.html' with form=form %}
+                </div>
+                </div>
+                        
+            
+{% endblock  %}
