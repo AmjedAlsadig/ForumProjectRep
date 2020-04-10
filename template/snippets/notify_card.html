@@ -1,0 +1,11 @@
+<div class="col-12 my-3">
+<div class="card">        
+    <div class="card-body">
+        {{ instance.timestamp|timesince }} ago
+    <p class="card-text">
+        {{ instance.sender }} {{ instance.action_type }}{% if instance.action_type != "posted" %}{{ instance.post.auther }}'s{% else %} a {% endif %}<a href="{{ instance.post.get_absolute_url }}">post</a> 
+    </p>
+    {{ instance.read_at|timesince }} ago
+    </div>
+</div>
+</div>

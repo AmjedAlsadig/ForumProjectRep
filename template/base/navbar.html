@@ -5,6 +5,7 @@
 {% url 'posts:lsit_view' as posts_list_url %}
 {% url 'login' as login_url %}
 {% url 'logout' as logout_url %}
+{% url 'posts:notification_name' as notifications_url %}
 
 
 <nav class="navbar navbar-expand-md navbar-light bg-light  mb-3">
@@ -25,6 +26,14 @@
         <li class="nav-item {% if request.path == people_url %}active{% endif %}">
             <a class="nav-link" href="{{ people_url }}">people</a>
         </li>
+        
+        {% if notification_no %}
+          <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
+            <a class="nav-link" href="{{ notifications_url }}">{{ notification_no }}</a>
+          </li>
+        {% endif %}
+          
+        
         {% if request.user.is_authenticated %}
             <li class="nav-item {% if request.path == logout_url %}active{% endif %}">
                 <a class="nav-link" href="{{ logout_url }}">logout</a>

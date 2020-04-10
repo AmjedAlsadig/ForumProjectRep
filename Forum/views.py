@@ -3,8 +3,9 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render ,redirect
 from django.urls import reverse
 from .forms import  loginForm, registerForm
-from ForumAccount.models import Friend, Post, UserProfile
+from ForumAccount.models import Friend, Post, UserProfile,Notifications
 from ForumAccount.forms import UserProfileForm
+from ForumAccount.views import notify_context
 
 def home_page(request):
     context = {
@@ -46,6 +47,8 @@ def profile_page(request):
                 context["posts"] = posts
             except Post.DoesNotExist :
                 print("Posts.DoesNotExist")
+            #querying notifications
+            notify_context(user,context)
     return render(request, "Profile.html", context)
 
 def users_profile_page(request, pk):
@@ -107,6 +110,8 @@ def users_profile_page(request, pk):
             context["posts"] = posts
         except Post.DoesNotExist :
             print('Post.DoesNotExist')
+        active_user = UserProfile.objects.get(user=request.user)
+        notify_context(active_user,context)
         return render(request, "Profile.html", context)
 
 def search_page(request):

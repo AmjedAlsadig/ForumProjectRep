@@ -5,10 +5,8 @@ from django.db.models.signals import pre_save
 from django.utils import timezone as tz
 from django.urls import reverse
 from django.db.models import F
-
-
-
-
+import datetime
+from django.utils.timezone import now
 from .utils import unique_slug_generator
 
 
@@ -129,8 +127,6 @@ class Friend(models.Model):
             current_user    =   user_following
         )
         user.following.remove(user_to_unfollow)
-
-    
     @classmethod 
     def add_friend(cls, current_user, new_friend):
         friend, created = cls.objects.get_or_create(
@@ -182,3 +178,31 @@ class Likes(models.Model):
         out = b.likes_list.count()
         print(out)
         print('removed')
+class Notifications(models.Model):
+    sender = models.ForeignKey(UserProfile,related_name='sender')
+    receivers = models.ManyToManyField(UserProfile,related_name='receiver')
+    post = models.ForeignKey(Post)
+    action_type = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True)
+    
+    def read(self):
+        self.read_at = now
+        print(self.read_at)
+    @classmethod
+    def add_nofi(cls, sender, receiver,post_obj,action):
+        notifications, created = cls.objects.get_or_create(
+            sender=sender,
+            post = post_obj,
+            action_type = action
+        )
+        # cls.post = post_obj
+        # cls.action_type = action
+        notifications.receivers.add(receiver)
+    @classmethod
+    def remove_nofi(cls, sender, receiver):
+        notifications, created = cls.objects.get_or_create(
+            sender=sender
+        )
+        notifications.receivers.remove(receiver)
+    

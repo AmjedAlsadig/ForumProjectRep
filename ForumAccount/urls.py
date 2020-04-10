@@ -22,7 +22,8 @@ from .views import   (  List_view_function ,
                         people,
                         alter_friend,
                         follow,
-                        Like
+                        Like,
+                        Notifications_view
                     )
 
 
@@ -41,7 +42,8 @@ urlpatterns = [
     url(r'^people',people,name='people'),
     url(r'^connect/(?P<operation>.+)/(?P<pk>\d+)/$', alter_friend, name='alter_friend'),   # path("<operation>/<pk>/", alter_friend, name="alter_friend")
     url(r'^follow/(?P<operation>.+)/(?P<pk>\d+)/$', follow, name='follow'),
-    url(r'^like',Like,name='like')
+    url(r'^like',Like,name='like'),
+    url(r'^Notifications',Notifications_view,name='notification_name')
 ]
 # url(r'^posts/$', List_view_function),
     

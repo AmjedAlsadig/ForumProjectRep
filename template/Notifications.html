@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h4>{{ notification_no }}</h4>
+        
+        {% if Notifications %}
+            {% for notify in Notifications %}
+                {% include 'snippets/notify_card.html' with instance=notify %}
+            {% endfor %}
+        {% endif %}
+            
+        
+    </div>
+{% endblock  %}
+    
