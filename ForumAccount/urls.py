@@ -21,6 +21,7 @@ from .views import   (  List_view_function ,
                         creat_comment,
                         people,
                         alter_friend,
+                        follow,
                         Like
                     )
 
@@ -39,6 +40,7 @@ urlpatterns = [
     url(r'^(?P<slug>[\w]+)/$', detail_slug_view_function, name='detail'),
     url(r'^people',people,name='people'),
     url(r'^connect/(?P<operation>.+)/(?P<pk>\d+)/$', alter_friend, name='alter_friend'),   # path("<operation>/<pk>/", alter_friend, name="alter_friend")
+    url(r'^follow/(?P<operation>.+)/(?P<pk>\d+)/$', follow, name='follow'),
     url(r'^like',Like,name='like')
 ]
 # url(r'^posts/$', List_view_function),

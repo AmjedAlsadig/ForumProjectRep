@@ -43,7 +43,7 @@ class UserProfile(models.Model):
     username = models.CharField(max_length=20)
     user   = models.OneToOneField(User)
     avatar = models.ImageField(upload_to=upload_file_to_user, null=True, blank=True)
-
+   
     def __str__(self):
         return self.user.username
 
@@ -116,6 +116,20 @@ pre_save.connect(comment_pre_save_reciver, sender = Comment)
 class Friend(models.Model):
     friend_list      =   models.ManyToManyField(UserProfile)
     current_user        =   models.ForeignKey(UserProfile,related_name='account_owner', null=True)
+    following = models.ManyToManyField(UserProfile,related_name='following')
+    @classmethod 
+    def follow(cls,user_following ,user_to_follow):
+        user, created = cls.objects.get_or_create(
+            current_user    =   user_following
+        )
+        user.following.add(user_to_follow)
+    @classmethod 
+    def un_follow(cls,user_following ,user_to_unfollow):
+        user, created = cls.objects.get_or_create(
+            current_user    =   user_following
+        )
+        user.following.remove(user_to_unfollow)
+
     
     @classmethod 
     def add_friend(cls, current_user, new_friend):

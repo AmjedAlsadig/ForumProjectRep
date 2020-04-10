@@ -4,9 +4,7 @@ from django.shortcuts import render, get_object_or_404, Http404, redirect
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.db.models import F
-
-
+from django.db.models import F,Q
 from .models import Post, Comment , upload_file_to ,get_filename_and_ext, Friend, UserProfile, Likes
 from .utils import unique_slug_generator
 from .forms import post_form, comment_form,friends_form, LikeForm
@@ -43,13 +41,31 @@ def List_view_function(request):
             print("new_qs       =   Friend.objects.get(current_user=user) not found")
         #quering post
         try :
-            post_query        =   Post.objects.all().order_by('-time')
-            print('post query found')
-            context['post_list'] = post_query
-            print('context + post_list')
-        except Post.DoesNotExist :
-            # post_query       =   None
-            print('post query not found')
+            following = Friend.objects.get(current_user=user)
+        except Friend.DoesNotExist:
+            print("Friend.DoesNotExist")
+            following = None
+        except :
+            print("except :")
+            following = None
+        if following is not None:
+            try :
+                post_query = Post.objects.filter(Q(auther__in =following.following.all())|Q(auther=user)).order_by('-time')
+                print('post query found')
+                context['post_list'] = post_query
+                print('context + post_list')
+            except Post.DoesNotExist :
+                # post_query       =   None
+                print('post query not found')
+        else :
+            try :
+                post_query        =   Post.objects.get(auther=user).order_by('-time')
+                print('post query found')
+                context['post_list'] = post_query
+                print('context + post_list')
+            except Post.DoesNotExist :
+                # post_query       =   None
+                print('post query not found')
         #writeing post functionallity
         if request.user.is_authenticated() :        # @login_required
             if request.method == 'POST' :
@@ -79,12 +95,7 @@ def detail_slug_view_function(request,pk=None, slug=None, *args, **kwargs):
             }  
     # quering post
     try: 
-        post_instance        = get_object_or_404(Post, slug=slug)
-        print("passed 1")
-        context['object'] = post_instance
-        print("passed 1")
-        context['like_count'] =  post_instance.view_count()
-        print("passed 1")
+        instance        = get_object_or_404(Post, slug=slug)
     except Post.MultipleObjectsReturned:
         qs              = Post.objects.filter(slug=slug)
         post_instance        = qs.first()
@@ -94,7 +105,7 @@ def detail_slug_view_function(request,pk=None, slug=None, *args, **kwargs):
         raise Http404("whaaaaaat")
     # quering comments
     try :
-        Comment_instance    =   Comment.objects.filter(post=post_instance)
+        Comment_instance    =   Comment.objects.filter(post=instance)
         print('checked')
         context['Comment']= Comment_instance
     except Comment.DoesNotExist :
@@ -109,7 +120,7 @@ def detail_slug_view_function(request,pk=None, slug=None, *args, **kwargs):
                 if form.is_valid() :
                     comment_instance    =  form.save(commit=False)
                     comment_instance.auther = user
-                    comment_instance.post = post_instance 
+                    comment_instance.post = instance 
                     comment_instance.save()      
                     print('checked')  
             else :
@@ -165,15 +176,24 @@ def people(request):
         "people":people,
     }
     return render(request, "people_page.html",context)
+def follow(request, operation, pk):
+    current_user = UserProfile.objects.get(user=request.user)
+    to_be_followed    =   UserProfile.objects.get(pk=pk)
+    if operation=='follow':
+                Friend.follow(current_user,to_be_followed )
+                print("follow list updated")
+    if operation=='unfollow':
+                Friend.un_follow(current_user, to_be_followed)
+    return redirect("users_profile",pk=pk)
 
 def alter_friend(request, operation, pk):
     current_user = UserProfile.objects.get(user=request.user)
     new_friend    =   UserProfile.objects.get(pk=pk)
     if operation=='add':
-                Friend.add_friend(current_user, new_friend)
-                print("Friend list updated")
+        Friend.add_friend(current_user, new_friend)
+        print("Friend list updated")
     if operation=='remove':
-                Friend.remove_friend(current_user, new_friend)
+        Friend.remove_friend(current_user, new_friend)
     return redirect("users_profile",pk=pk)
 def Like_post(user,post_id):
     new_like , created = Likes.objects.get_or_create(post=post_id,likes_list=user)
@@ -226,4 +246,3 @@ def Like(request):
             print("DisLike")
         print('after like')
     return redirect('home')
-

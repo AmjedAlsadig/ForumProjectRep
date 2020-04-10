@@ -64,35 +64,50 @@ def users_profile_page(request, pk):
         context['user'] = user
     except :
         raise Http404("user not found")
-    try :
-        new_qs       =   Friend.objects.get(current_user=user)
-        friend_list  = new_qs.friend_list.all()
-        context["friend_list"] = friend_list
-    except Friend.DoesNotExist :
-        new_qs = None
-        print('Friend.DoesNotExist')
-    if new_qs is not None : 
+    if user==UserProfile.objects.get(user=request.user):
+        return redirect("profile")
+    else :
         try :
-            request_user = request.user
-            friendship_state_query = Friend.friend_list.through.objects.get(userprofile=user)
-            print('friendship_state_query found')
-            friendship_state = "remove"
-            context['remove'] = friendship_state
+            new_qs       =   Friend.objects.get(current_user=user)
+            friend_list  = new_qs.friend_list.all()
+            context["friend_list"] = friend_list
         except Friend.DoesNotExist :
+            new_qs = None
+            print('Friend.DoesNotExist')
+        if new_qs is not None : 
+            try :
+                friendship_state_query = Friend.friend_list.through.objects.get(userprofile=user)
+                print('friendship_state_query found')
+                friendship_state = "remove"
+                context['remove'] = friendship_state
+            except Friend.DoesNotExist :
+                friendship_state = "add"
+                context['add'] = friendship_state
+            except  :
+                friendship_state = "add"
+                context['add'] = friendship_state
+            try :
+                following_state_query = Friend.following.through.objects.get(userprofile=user)
+                print('following_state_query found')
+                follow_state = "unfollow"
+                context['unfollow'] = follow_state
+            except Friend.DoesNotExist :
+                follow_state = "follow"
+                context['follow'] = follow_state
+            except  :
+                follow_state = "follow"
+                context['follow'] = follow_state
+        else:
+            follow_state = "follow"
+            context['follow'] = follow_state
             friendship_state = "add"
             context['add'] = friendship_state
-        except  :
-            friendship_state = "add"
-            context['add'] = friendship_state
-    else:
-        friendship_state = "add"
-        context['add'] = friendship_state
-    try :
-        posts        = Post.objects.all().filter(auther=user).order_by('-time')
-        context["posts"] = posts
-    except Post.DoesNotExist :
-       print('Post.DoesNotExist')
-    return render(request, "Profile.html", context)
+        try :
+            posts        = Post.objects.all().filter(auther=user).order_by('-time')
+            context["posts"] = posts
+        except Post.DoesNotExist :
+            print('Post.DoesNotExist')
+        return render(request, "Profile.html", context)
 
 def search_page(request):
     context = {

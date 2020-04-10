@@ -23,6 +23,18 @@
                     </a>
                 {% endif %}
             </div>
+            <div class="col-6 col-md-4 col-lg-4 ml-lg-auto">
+                {% if follow %}
+                    <a href="{% url 'posts:follow' pk=pk operation='follow' %}">
+                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Follow</button>
+                    </a>
+                {% endif %}
+                {% if unfollow %}
+                    <a href="{% url 'posts:follow' pk=pk operation='unfollow' %}">
+                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Unfollow</button>
+                    </a>
+                {% endif %}
+            </div>            
         </div>
         <div class="row mb-5 alert-primary">
             <div class="col-12 ">
