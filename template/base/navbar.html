@@ -6,6 +6,8 @@
 {% url 'login' as login_url %}
 {% url 'logout' as logout_url %}
 {% url 'posts:notification_name' as notifications_url %}
+{% url 'posts:Friend_request_view' as Friend_request_view_url %}
+
 
 
 <nav class="navbar navbar-expand-md navbar-light bg-light  mb-3">
@@ -29,7 +31,20 @@
         
         {% if notification_no %}
           <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
-            <a class="nav-link" href="{{ notifications_url }}">{{ notification_no }}</a>
+            <a class="nav-link" href="{{ notifications_url }}">{{ notification_no }} Notifications</a>
+          </li>
+        {% else %}
+          <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
+            <a class="nav-link" href="{{ notifications_url }}">0 Notifications</a>
+          </li>
+        {% endif %}
+        {% if req_no %}
+          <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
+            <a class="nav-link" href="{{ Friend_request_view_url }}">{{ req_no }} Friend Requests</a>
+          </li>
+        {% else %}
+          <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
+            <a class="nav-link" href="{{ Friend_request_view_url }}">0 <i class="fa fa-bell"></i></a>
           </li>
         {% endif %}
           

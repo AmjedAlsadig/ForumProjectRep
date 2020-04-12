@@ -23,7 +23,12 @@ from .views import   (  List_view_function ,
                         alter_friend,
                         follow,
                         Like,
-                        Notifications_view
+                        Notifications_view,
+                        accept_request,
+                        remove_friend,
+                        friend_request,
+                        ignore_request,
+                        Friend_request_view
                     )
 
 
@@ -40,10 +45,15 @@ urlpatterns = [
     url(r'^creatcomment/$', creat_comment, name='create_comment'),
     url(r'^(?P<slug>[\w]+)/$', detail_slug_view_function, name='detail'),
     url(r'^people',people,name='people'),
-    url(r'^connect/(?P<operation>.+)/(?P<pk>\d+)/$', alter_friend, name='alter_friend'),   # path("<operation>/<pk>/", alter_friend, name="alter_friend")
+    # url(r'^connect/(?P<operation>.+)/(?P<pk>\d+)/$', alter_friend, name='alter_friend'),   # path("<operation>/<pk>/", alter_friend, name="alter_friend")
     url(r'^follow/(?P<operation>.+)/(?P<pk>\d+)/$', follow, name='follow'),
     url(r'^like',Like,name='like'),
-    url(r'^Notifications',Notifications_view,name='notification_name')
+    url(r'^Notifications',Notifications_view,name='notification_name'),
+    url(r'^Friend_request_view',Friend_request_view,name='Friend_request_view'),
+    url(r'^friend_request/(?P<pk>\d+)/$', friend_request, name='friend_request'),#send request
+    url(r'^accept_request/(?P<pk>\d+)/$', accept_request, name='accept_request'),#accepte request
+    url(r'^ignore_request/(?P<pk>\d+)/$', ignore_request, name='ignore_request'),#ignore request
+    url(r'^remove_friend/(?P<pk>\d+)/$', remove_friend, name='remove_friend'),#remove friend
 ]
 # url(r'^posts/$', List_view_function),
     

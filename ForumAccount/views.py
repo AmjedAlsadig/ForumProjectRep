@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models import F,Q
-from .models import Post, Comment , upload_file_to ,get_filename_and_ext, Friend, UserProfile, Likes,Notifications
+from .models import Post, Comment , upload_file_to ,get_filename_and_ext, Friend, UserProfile, Likes,Notifications,FriendRequest
 from .utils import unique_slug_generator
 from .forms import post_form, comment_form,friends_form, LikeForm
 from . import forms
@@ -47,7 +47,24 @@ def notify_context(user,context):
     except :
         print('except :')
         print('noti not found')
-        
+def friend_requests_context(user,context):
+    #querying  FriendRequest
+    try :
+        print(user)
+        print('check 0')
+        req = FriendRequest.objects.filter(receiver=user)
+        req_no_qs = req.filter(read_at=None)
+        context['friend_request'] = req
+        req_no = 0 
+        for counter in req_no_qs :
+            print(counter.read_at)
+            req_no = req_no+1
+        context["req_no"] = req_no
+        print(req_no)
+    except :
+        print('except :')
+        print('req not found')   
+
 def List_view_function(request):
     if request.user.is_authenticated() :       # @login_required
         # quering user
@@ -115,6 +132,7 @@ def List_view_function(request):
                 print('post query not found')
         #querying  Notifications
         notify_context(user,context)
+        friend_requests_context(user,context)
         # #writeing post functionallity
         if request.user.is_authenticated() :        # @login_required
             if request.method == 'POST' :
@@ -203,6 +221,7 @@ def detail_slug_view_function(request,pk=None, slug=None, *args, **kwargs):
             form = None
     #querying  Notifications
     notify_context(user,context)
+    friend_requests_context(user,context)
     return render(request, 'account/detail_function.html', context)
 
 @login_required(login_url="/login")
@@ -257,6 +276,7 @@ def people(request):
     }
     # querying notifications
     notify_context(user,context)
+    friend_requests_context(user,context)
     return render(request, "people_page.html",context)
 def follow(request, operation, pk):
     current_user = UserProfile.objects.get(user=request.user)
@@ -349,6 +369,100 @@ def Notifications_view(request):
         raise Http404('user not found >>> Notifications_view')
     try :
         notify_context(active_user,context)
+        friend_requests_context(active_user,context)
     except :
         raise Http404("Notifications page eror")
     return render(request,'Notifications.html',context)
+def friend_request(request,pk):
+    current_user = UserProfile.objects.get(user=request.user)
+    new_friend    =   UserProfile.objects.get(pk=pk)
+    try :
+            friend_request_qs,created = FriendRequest.objects.get_or_create(
+                sender=current_user,
+                receiver=new_friend,
+                requested=True
+            )
+    except :
+        print('exception :(')
+    return redirect("users_profile",pk=pk)
+def accept_request(request,pk):
+    print("accept")
+    current_user = UserProfile.objects.get(user=request.user)
+    new_friend    =   UserProfile.objects.get(pk=pk)
+    try :
+            friend_request_qs,created = FriendRequest.objects.get_or_create(
+                sender=new_friend,
+                receiver=current_user,
+                requested=True
+            )
+            friend_request_qs.accepted = True
+            friend_request_qs.save()
+            print("accept check 1")
+            try :
+                qs=FriendRequest.objects.get(Q(sender=new_friend)&Q(receiver=current_user))
+                print("accept check 2")
+                bool = True
+            except FriendRequest.DoesNotExist :
+                bool = null
+            except :
+                print("exception")
+            print("accept check 3")
+            print(bool)
+            if (bool == True) and (qs.accepted == True) :
+                print("accept check 4")
+                Friend.add_friend(current_user, new_friend)
+                qs.read_at = now()
+                qs.save()
+                qs.delete()
+                print('qs.delete()')
+                qs.save()
+                print(qs.read_at)
+                print("Friend list updated")
+    except :
+        print('exception :(')
+    return redirect("users_profile",pk=pk)
+
+def ignore_request(request,pk):
+    current_user = UserProfile.objects.get(user=request.user)
+    new_friend    =   UserProfile.objects.get(pk=pk)
+    try :
+        friend_request_qs,created = FriendRequest.objects.get_or_create(
+            sender=current_user,
+            receiver=new_friend,
+            requested=True
+        )
+        friend_request_qs.delete()
+        try :
+            qs=FriendRequest.objects.get(Q(sender=current_user)&Q(receiver=new_friend))
+            bool = True
+        except FriendRequest.DoesNotExist :
+            bool = False
+        except :
+            print("exception")
+        if (bool == True):
+            qs.read_at = now()
+            print("Friend list updated")
+    except :
+        print('exception :(')
+    return redirect("users_profile",pk=pk)
+
+def remove_friend(request,pk):
+    current_user = UserProfile.objects.get(user=request.user)
+    new_friend    =   UserProfile.objects.get(pk=pk)
+    Friend.remove_friend(current_user, new_friend)
+    return redirect("users_profile",pk=pk)
+
+def Friend_request_view(request):
+    context = {
+        'initilze' : 'initilze'
+    }
+    try :
+        active_user = UserProfile.objects.get(user=request.user)
+    except :
+        raise Http404('user not found >>> Notifications_view')
+    try :
+        notify_context(active_user,context)
+        friend_requests_context(active_user,context)
+    except :
+        raise Http404("Notifications page eror")
+    return render(request,'friend_requests.html',context)

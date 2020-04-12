@@ -206,3 +206,9 @@ class Notifications(models.Model):
         )
         notifications.receivers.remove(receiver)
     
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(UserProfile,related_name='request_sender')
+    receiver = models.ForeignKey(UserProfile, related_name='request_receiver')
+    requested = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+    read_at = models.DateTimeField(null=True)

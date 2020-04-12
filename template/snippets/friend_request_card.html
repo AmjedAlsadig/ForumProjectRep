@@ -1,0 +1,15 @@
+{% url 'users_profile' pk=instance.sender.pk as profile_url %}
+{% url 'posts:accept_request' pk=instance.sender.pk as accept_url %}
+{% url 'posts:ignore_request' pk=11 as ignore_url %}
+<div class="col-12 my-3">
+<div class="card">        
+    <div class="card-body">
+    <p class="card-text">
+        <a class="mx-auto" href="{{ profile_url }}">{{ instance.sender }}</a> sent you friend request  
+        <Button class="btn btn-outline-success mx-auto"><a href="{{ accept_url }}"> accept</a></Button>
+        <Button class="btn btn-warning mx-auto"><a href="{{ ignore_url }}"> ignore</a></Button>
+    </p>
+    {{ instance.read_at|timesince }} ago
+    </div>
+</div>
+</div>

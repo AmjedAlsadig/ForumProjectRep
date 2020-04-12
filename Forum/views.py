@@ -5,7 +5,8 @@ from django.urls import reverse
 from .forms import  loginForm, registerForm
 from ForumAccount.models import Friend, Post, UserProfile,Notifications
 from ForumAccount.forms import UserProfileForm
-from ForumAccount.views import notify_context
+from ForumAccount.views import notify_context,friend_requests_context
+from django.db.models import F,Q
 
 def home_page(request):
     context = {
@@ -49,6 +50,7 @@ def profile_page(request):
                 print("Posts.DoesNotExist")
             #querying notifications
             notify_context(user,context)
+            friend_requests_context(user,context)
     return render(request, "Profile.html", context)
 
 def users_profile_page(request, pk):
@@ -57,6 +59,7 @@ def users_profile_page(request, pk):
         "description"   :   "Welcome to the Profile page",
         "pk"            :   pk
     }
+    active_user = UserProfile.objects.get(user=request.user)
     try :
         user    =   UserProfile.objects.get(pk=pk)
         print(user)
@@ -70,6 +73,7 @@ def users_profile_page(request, pk):
     if user==UserProfile.objects.get(user=request.user):
         return redirect("profile")
     else :
+
         try :
             new_qs       =   Friend.objects.get(current_user=user)
             friend_list  = new_qs.friend_list.all()
@@ -79,7 +83,9 @@ def users_profile_page(request, pk):
             print('Friend.DoesNotExist')
         if new_qs is not None : 
             try :
-                friendship_state_query = Friend.friend_list.through.objects.get(userprofile=user)
+                # friendship_state_query = Friend.friend_list.through.objects.get(userprofile=user)
+                # friendship_state_query = new_qs.friend_list.through.objects.get(userprofile=active_user)
+                friendship_state_query = Friend.objects.get(Q(current_user=active_user)&Q(friend_list=user))
                 print('friendship_state_query found')
                 friendship_state = "remove"
                 context['remove'] = friendship_state
@@ -90,7 +96,8 @@ def users_profile_page(request, pk):
                 friendship_state = "add"
                 context['add'] = friendship_state
             try :
-                following_state_query = Friend.following.through.objects.get(userprofile=user)
+                following_state_query = Friend.objects.get(Q(current_user=active_user)&Q(following=user))
+                # following_state_query = new_qs.following.through.objects.get(userprofile=active_user)
                 print('following_state_query found')
                 follow_state = "unfollow"
                 context['unfollow'] = follow_state
@@ -110,8 +117,8 @@ def users_profile_page(request, pk):
             context["posts"] = posts
         except Post.DoesNotExist :
             print('Post.DoesNotExist')
-        active_user = UserProfile.objects.get(user=request.user)
         notify_context(active_user,context)
+        friend_requests_context(active_user,context)
         return render(request, "Profile.html", context)
 
 def search_page(request):

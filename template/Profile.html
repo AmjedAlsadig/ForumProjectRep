@@ -13,12 +13,12 @@
             </div>
             <div class="col-6 col-md-4 col-lg-4 ml-lg-auto">
                 {% if add %}
-                    <a href="{% url 'posts:alter_friend' pk=pk operation='add' %}">
+                    <a href="{% url 'posts:friend_request' pk=pk %}">
                         <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Add Friend</button>
                     </a>
                 {% endif %}
                 {% if remove %}
-                    <a href="{% url 'posts:alter_friend' pk=pk operation='remove' %}">
+                    <a href="{% url 'posts:remove_friend' pk=pk%}">
                         <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">remove Friend</button>
                     </a>
                 {% endif %}
@@ -41,7 +41,7 @@
                 <h4 class="p-auto">Friends</h4>
             </div>
                 {% for friend in friend_list %}
-               <div class="col-6 col-md-5 col-lg-4"> {{ friend.username }} </div>
+               <div class="col-6 col-md-5 col-lg-4"><a href="{% url 'users_profile' pk=friend.pk %}"> {{ friend.username }} </a></div>
             {% endfor %}
             
         </div>
