@@ -1,6 +1,6 @@
-{% url 'users_profile' pk=instance.sender.pk as profile_url %}
-{% url 'posts:accept_request' pk=instance.sender.pk as accept_url %}
-{% url 'posts:ignore_request' pk=11 as ignore_url %}
+{% url 'accounts:users_profile' pk=instance.sender.pk as profile_url %}
+{% url 'accounts:accept_request' pk=instance.sender.pk as accept_url %}
+{% url 'accounts:ignore_request' pk=instance.sender.pk as ignore_url %}
 <div class="col-12 my-3">
 <div class="card">        
     <div class="card-body">

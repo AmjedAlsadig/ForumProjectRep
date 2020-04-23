@@ -4,9 +4,9 @@
 <div class="row">
     
     {% if users_query_list %}    
-        {% for object in users_query_list %}
-        <div class="col-12">
-        {{ object.username }}
+        {% for user in users_query_list %}
+        <div class="col-12 ml-4 my-3 ">
+            <a href="{% url 'accounts:users_profile' pk=user.pk %}">{{ user.username }}</a>
         </div>
         {% endfor %}
     {% else %}

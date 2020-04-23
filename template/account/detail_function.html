@@ -1,48 +1,64 @@
-{% extends 'base.html' %}
+{% extends 'base_scrolling.html' %}
 
 
 {% block content %}
-        <div class="row">
-            <div class="col-12">
-                <!-- <h1>this is function detail view</h1> -->
-
-                <h3>{{ object.title }}</h3>
-                {{ object.time|timesince }} ago
-                <p>{{ object.content }}</p>
-                <!-- <img src="{{ object.image }}" /> -->
-
-                {% if object.image %}
-                    <img src= '{{ object.image.url }}'' class="img-fluid" />
-                {% endif %}
-                <p> {{ like_count }} likes </p>
-            </div>          
-        </div>
-                
-                <div class="row">
-                    {% if Comment %}
-                    <div class="col-12">
-                        <h2>Comment</h2>
-                    </div>
-                    
-                    {% for counter in Comment  %}
-                    <div class="col-6 my-3">
-                        {% if counter.image %}
-                            <img src= '{{ counter.image.url }}'' class="img-fluid" style="max-width: 100%;max-height: 100%;" />
-                        {% endif %}
-                    </div>
-                    <div class="col-4 col-lg-2 my-auto">
-                        <h4>{{ counter.auther }}</h4>
-                    </div>
-                    <div class="col-10 col-lg-4 my-auto">
-                        <p>{{ counter.content }}</p> </br>
-                    </div>
-                    
-                    {% endfor %}
-                {% endif %}
-                <div class="col-12  m-auto">
-                    {% include 'snippets/Create_comment.html' with form=form %}
+<div class="row order-1 scrolling-container" >
+    <div class="col-12 col-lg-4 ml-auto right order-12" style="max-width: 300px;">
+            <div class="col-8 col-md-11  mx-auto">
+                    <a href="{{ people_url }}"  class="page-link m-auto"><h4>Connent friends &raquo;</h4></a>
+            </div>
+    </div>
+    <div class="col-12 col-lg-7 mr-auto scroll order-6">
+                <div class="col-12 ">
+                <div class="col-12">
+                    <h3>{{ object.title }}</h3>
+                    <small>{{ object.time|timesince }} ago</small>
+                </div> 
+                <div class="col-12">
+                    <p>{{ object.content }}</p>
                 </div>
-                </div>
+                <div class="col-12">
+                    {% if object.image %}
+                        <img src= '{{ object.image.url }}'' class="img-fluid" />
+                    {% endif %}
+                    <p> {{ like_count }} likes </p>
+                </div>    
+                    {% if comment_count %}
+                        <p> {{ comment_count }} commets </p>
+                    {% endif %}
                         
+                    
+                        
+            </div>
+                    
+            <div class="col-12 ">
+                {% if Comment %}
+                <div class="col-12">
+                    <h2>Comment</h2>
+                </div>
+                
+                {% for counter in Comment  %}
+                <div class="col-6 my-3">
+                    {% if counter.image %}
+                        <img src= '{{ counter.image.url }}'' class="img-fluid" style="max-width: 100%;max-height: 100%;" />
+                    {% endif %}
+                </div>
+                <div class="col-4 col-lg-2 my-auto">
+                    <h4>{{ counter.auther }}</h4>
+                </div>
+                <div class="col-10 col-lg-4 my-auto">
+                    <p>{{ counter.content }}</p> </br>
+                </div>
+                
+                {% endfor %}
+            {% endif %}
+            <div class="col-12  m-auto">
+                {% include 'snippets/Create_comment.html' with form=form %}
+            </div>
+            </div>
+        </div>
+        
+    </div>
+    
             
 {% endblock  %}

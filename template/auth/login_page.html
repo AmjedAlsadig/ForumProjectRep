@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}  
-{% url 'register' as register_url %}
+{% url 'accounts:register' as register_url %}
     {% if url %}
     <p>please login to post </p>
     {% endif %}

@@ -7,21 +7,23 @@
 <form action="" method="post" enctype="multipart/form-data">    
         {% csrf_token %}
     <div class="row">
-        <div class="col-10 m-auto">
-            <h4>Write post</h4>
+        <div class="col-10">
+            <h6>Write post</h6>
         </div>
         <div class="col-10 col-md-6 col-lg-6">
             {{ form.title|as_crispy_field }}
         </div>
-            
+        <div class="col-6">
+            <div class="custom-file">
+                 {{ form.image|as_crispy_field }}
+            </div>
+        </div>
         <div class="col-10">
             {{ form.content|as_crispy_field }}
         </div>
     
-        <div class="col-6">
-            {{ form.image|as_crispy_field }}
-        </div>
-        <div class="col">
+        
+        <div class="col mt-auto">
             <input type="submit" class="btn btn-success float-right"" value="Submit" style="margin-top: 1em;">
         </div>
     

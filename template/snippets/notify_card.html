@@ -3,9 +3,23 @@
     <div class="card-body">
         {{ instance.timestamp|timesince }} ago
     <p class="card-text">
-        {{ instance.sender }} {{ instance.action_type }}{% if instance.action_type != "posted" %}{{ instance.post.auther }}'s{% else %} a {% endif %}<a href="{{ instance.post.get_absolute_url }}">post</a> 
+        
+        
+        {% if instance.action_type != "posted" %}
+        {% if instance.post.auther != user %}{{ instance.post.auther }}'s  <a href="{{ instance.post.get_absolute_url }}">post</a> {{ instance.action_type }} {{ instance.sender }} {% else %}your <a href="{{ instance.post.get_absolute_url }}">post</a> {{ instance.action_type }} by {{ instance.sender }}{% endif %}
+        {% else %}
+            {{ instance.post.auther }}  
+           posted a <a href="{{ instance.post.get_absolute_url }}">post</a> 
+        {% endif %}
+        
     </p>
-    {{ instance.read_at|timesince }} ago
+    <small>
+        {% if instance.read_at %}
+            Read {{ instance.read_at|timesince }} ago
+        {% else %} 
+        new notification
+        {% endif %}
+    </small>
     </div>
 </div>
 </div>

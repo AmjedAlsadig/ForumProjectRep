@@ -8,8 +8,11 @@
             {% for request in friend_request %}
                 {% include 'snippets/friend_request_card.html' with instance=request %}
             {% endfor %}
+        {% else %}
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{{ people_url }}"  class="page-link m-auto"><h4>Connent friends &raquo;</h4></a>
+        </div>
         {% endif %}
-                   
     </div>
 {% endblock  %}
     

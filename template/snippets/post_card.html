@@ -7,18 +7,29 @@
         </a>
     {% endif %}
         
-    <div class="card-body">
-        <h4 class="card-title">{{ instance.auther }}</h4>
-        {{ instance.time|timesince }} ago
-        <p class="card-text">{{ instance.content|linebreaks|truncatewords:20 }}</p>
-        
+    <div class="card-body post">
+        <h5 class="card-title">{{ instance.auther }}</h5>
+        <div class="card-text ml-4">
+            {{ instance.time|timesince }} ago
+            <p class="card-text">{{ instance.content|linebreaks|truncatewords:20 }}</p>
+        </div>
         {% if instance.slug is not None %}
-        <div class="row">
+        <div class="row ml-2">
             <div class="col-6 m-auto col-sm-4">
-                <p>{{ instance.view_count }} likes </p>
+                
+                
+                
+                
+                {% if instance.Likes_count  %}
+                <p>{{ instance.Likes_count }} likes </p>
+                {% endif %}
+                {% if instance.comments_count %}
+                <p>{{ instance.comments_count }} comments </p>
+                {% endif %}
+                
             </div>
             <div class="col-6 m-auto col-sm-4">
-                <form method="POST" action="{% url 'posts:like' %}">
+                <form method="POST" action="{% url 'blog:like' %}">
                     {% csrf_token %}
                   <input type="hidden" name="like_post_slug" value="{{ instance.slug }}">
                   <button class="btn btn-outline-success" type="submit">Like</button>

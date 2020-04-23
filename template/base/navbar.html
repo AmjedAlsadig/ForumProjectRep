@@ -1,66 +1,72 @@
 {% url 'home' as home_url %}
-{% url 'profile' as profile_url %}
-{% url 'people' as people_url %}
+{% url 'accounts:profile' as profile_url %}
+{% url 'accounts:people' as people_url %}
 {% url 'search' as search_url %}
-{% url 'posts:lsit_view' as posts_list_url %}
-{% url 'login' as login_url %}
-{% url 'logout' as logout_url %}
-{% url 'posts:notification_name' as notifications_url %}
-{% url 'posts:Friend_request_view' as Friend_request_view_url %}
+{% url 'blog:lsit_view' as posts_list_url %}
+{% url 'accounts:login' as login_url %}
+{% url 'accounts:logout' as logout_url %}
+{% url 'blog:notification_name' as notifications_url %}
+{% url 'blog:Friend_request_view' as Friend_request_view_url %}
 
 
-
-<nav class="navbar navbar-expand-md navbar-light bg-light  mb-3">
-  <div class="container">
-    <a class="navbar-brand" href="{{ home_url }}">Forum</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item {% if request.path == home_url %}active{% endif %}">
-          <a class="nav-link" href="{{ home_url }}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item {% if request.path == profile_url %}active{% endif %}">
-          <a class="nav-link" href="{{ profile_url }}">profile</a>
-        </li>
-        <li class="nav-item {% if request.path == people_url %}active{% endif %}">
-            <a class="nav-link" href="{{ people_url }}">people</a>
-        </li>
-        
-        {% if notification_no %}
-          <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
-            <a class="nav-link" href="{{ notifications_url }}">{{ notification_no }} Notifications</a>
+<div class="container-fluid theme">
+  <nav class="navbar navbar-expand-md  my-2 " style="max-height: 30px;">
+    <div class="container">
+      <a class="navbar-brand a-nav" href="{{ home_url }}">Forum</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class=" {% if request.path == home_url %}active {% else %}nav-item{% endif %}">
+            <a class="nav-link" href="{{ home_url }}"><i class="fa fa-home" aria-hidden="true"></i>
+              <span class="sr-only">(current)</span></a>
           </li>
-        {% else %}
-          <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
-            <a class="nav-link" href="{{ notifications_url }}">0 Notifications</a>
+          <li class="nav-item {% if request.path == profile_url %}active{% endif %}">
+            <a class="nav-link" href="{{ profile_url }}"><i class="fas fa-user "></i>
+            </a>
           </li>
-        {% endif %}
-        {% if req_no %}
-          <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
-            <a class="nav-link" href="{{ Friend_request_view_url }}">{{ req_no }} Friend Requests</a>
+          <li class="nav-item {% if request.path == people_url %}active{% endif %}">
+              <a class="nav-link" href="{{ people_url }}"><i class="fa fa-users" aria-hidden="true"></i>
+              </a>
           </li>
-        {% else %}
-          <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
-            <a class="nav-link" href="{{ Friend_request_view_url }}">0 <i class="fa fa-bell"></i></a>
-          </li>
-        {% endif %}
+          {% include 'snippets/searchBar.html' %}
+          {% if notification_no %}
+            <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
+              <a class="nav-link" href="{{ notifications_url }}">{{ notification_no }} <i class="fa fa-bell fa-lg"></i></a>
+            </li>
+          {% else %}
+            <li class="nav-item {% if request.path == notifications_url %}active{% endif %}">
+              <a class="nav-link" href="{{ notifications_url }}">0 <i class="fa fa-bell fa-lg"></i></a>
+            </li>
+          {% endif %}
+          {% if req_no %}
+            <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
+              <a class="nav-link" href="{{ Friend_request_view_url }}">{{ req_no }} <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a>
+            </li>
+          {% else %}
+            <li class="nav-item {% if request.path == Friend_request_view_url %}active{% endif %}">
+              <a class="nav-link" href="{{ Friend_request_view_url }}">0 <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+              </a>
+            </li>
+          {% endif %}
+            
           
+          {% if request.user.is_authenticated %}
+              <li class="nav-item {% if request.path == logout_url %}active{% endif %}">
+                  <a class="nav-link" href="{{ logout_url }}"><i class="fa fa-sign-out" aria-hidden="true"></i>
+                  </a>
+              </li>
+          {% else %}
+              <li class="nav-item {% if request.path == login_url %}active{% endif %}">
+                  <a class="nav-link" href="{{ login_url }}"><i class="fa fa-sign-in " aria-hidden="true"></i>
+                  </a>
+              </li>
+          {% endif %}
         
-        {% if request.user.is_authenticated %}
-            <li class="nav-item {% if request.path == logout_url %}active{% endif %}">
-                <a class="nav-link" href="{{ logout_url }}">logout</a>
-            </li>
-        {% else %}
-            <li class="nav-item {% if request.path == login_url %}active{% endif %}">
-                <a class="nav-link" href="{{ login_url }}">login</a>
-            </li>
-        {% endif %}
-       
-      </ul>
-       {% include 'snippets/searchBar.html' %}
+        </ul>
+      </div>
     </div>
-  </div>
   </nav>
+</div>

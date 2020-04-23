@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from ForumAccount.models import UserProfile
+from accounts.models import UserProfile
 
 # Create your views here.
 def searchView(request):

@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div class="row mb-5 alert-secondary">
+        
+        
+            
+        <div class="row py-3" style="background-image: url({{ user.cover.url }});">
             
             {% if avatar %}
                 <div class="col-6 col-md-2 col-lg-2">
@@ -9,39 +12,61 @@
                 </div>
             {% endif %}
             <div class="col-6 col-md-4 col-lg-4 my-auto">
-                <h4>{{ username }}</h4>
+                <b><h1 style="color: white;">{{ username }}</h1></b>
             </div>
-            <div class="col-6 col-md-4 col-lg-4 ml-lg-auto">
+            
+            {% if edit %}
+                <div class="col-12 col-md-4 col-lg-2 ml-auto my-auto">
+                    <a href="{% url 'accounts:edit' %}"><button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Edit profile</button></a>
+                </div>
+            {% endif %}
+                
+            <div class="col-7 col-md-2 col-lg-2 ">
                 {% if add %}
-                    <a href="{% url 'posts:friend_request' pk=pk %}">
-                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Add Friend</button>
+                    <a href="{% url 'accounts:friend_request' pk=pk %}">
+                        <button type="submit" class="btn btn-success   mx-3" value="Submit" style="margin-top: 1em;">Add Friend</button>
                     </a>
                 {% endif %}
                 {% if remove %}
-                    <a href="{% url 'posts:remove_friend' pk=pk%}">
-                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">remove Friend</button>
+                    <a href="{% url 'accounts:remove_friend' pk=pk%}">
+                        <button type="submit" class="btn btn-success   mx-3" value="Submit" style="margin-top: 1em;">remove Friend</button>
                     </a>
                 {% endif %}
             </div>
-            <div class="col-6 col-md-4 col-lg-4 ml-lg-auto">
-                {% if follow %}
-                    <a href="{% url 'posts:follow' pk=pk operation='follow' %}">
-                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Follow</button>
+            <div class="col-4 col-md-2 col-lg-2 ">
+            {% if follow %}
+                    <a href="{% url 'accounts:follow' pk=pk operation='follow' %}">
+                        <button type="submit" class="btn btn-success   mx-3" value="Submit" style="margin-top: 1em;">Follow</button>
                     </a>
                 {% endif %}
                 {% if unfollow %}
-                    <a href="{% url 'posts:follow' pk=pk operation='unfollow' %}">
-                        <button type="submit" class="btn btn-success float-right" value="Submit" style="margin-top: 1em;">Unfollow</button>
+                    <a href="{% url 'accounts:follow' pk=pk operation='unfollow' %}">
+                        <button type="submit" class="btn btn-success   mx-3" value="Submit" style="margin-top: 1em;">Unfollow</button>
                     </a>
                 {% endif %}
-            </div>            
+            </div>   
+            
         </div>
-        <div class="row mb-5 alert-primary">
-            <div class="col-12 ">
+        <div class="row post  mb-5 py-3">
+            <div class="col-auto m-auto py-2 theme-secondary">
+                <a href="#"> afsgergzdfz</a>
+            </div>
+            <div class="col-auto  m-auto py-2 theme-secondary">
+                <a href="#"> afsgergzdfz</a>
+            </div>
+            <div class="col-auto  m-auto py-2 theme-secondary">
+                <a href="#"> afsgergzdfz</a>
+            </div>
+            <div class="col-auto  m-auto py-2 theme-secondary">
+                <a href="#"> afsgergzdfz</a>
+            </div>
+        </div>   
+        <div class="row mb-5 post">
+            <div class="col-12">
                 <h4 class="p-auto">Friends</h4>
             </div>
                 {% for friend in friend_list %}
-               <div class="col-6 col-md-5 col-lg-4"><a href="{% url 'users_profile' pk=friend.pk %}"> {{ friend.username }} </a></div>
+                <div class="col-10 col-lg-5 m-3 py-2   theme-secondary"><a class="friend" href="{% url 'accounts:users_profile' pk=friend.pk %}"> {{ friend.username }} </a></div>
             {% endfor %}
             
         </div>

@@ -15,30 +15,19 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.conf.urls import url, include
-from django.contrib import admin
-from .views import home_page, profile_page, users_profile_page, search_page, login_page, register_page,logout_page
-from ForumAccount.views import List_view_function, people
 from django.views.generic import TemplateView
+from django.contrib import admin
 
+from blog.views import List_view_function
 urlpatterns = [
     url(r'^$', List_view_function, name='home'),
-    url(r'^profile/', profile_page, name='profile'),
-    # url(r'^search/', search_page, name='search'),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/', login_page, name='login'),
-    url(r'^logout/', logout_page, name='logout'),
-    url(r'^register/', register_page, name='register'),
+    #Including apps urls
+    url(r'^posts/', include('accounts.urls', namespace='accounts')),
+    url(r'^posts/', include('blog.urls', namespace='blog')),
+    url(r'^search/', include('search.urls', namespace='search')),    
     url(r'^bootstrap/', TemplateView.as_view(template_name='bootstrap\example.html')),
-    
-    #account list view to display Posts
-    url(r'^posts/', include('ForumAccount.urls', namespace='posts')),
-    url(r'^search/', include('search.urls', namespace='search')),
-    url(r'^people',people,name='people'),
-    url(r'^users_profile/(?P<pk>\d+)/$', users_profile_page, name='users_profile'),
-    
-    
 ]
 
 if settings.DEBUG:
