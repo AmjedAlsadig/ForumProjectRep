@@ -358,7 +358,7 @@ def edit_profile(request):
         form = EditProfileForm(request.POST,instance=user.user)
         if form.is_valid() :
             form.save()
-            return redirect('profile')
+            return redirect('accounts:profile')
     else :
         form = EditProfileForm(instance=user.user)
         context['form'] = form
@@ -370,11 +370,11 @@ def change_password(request):
         'init' : 'init'
     }
     if request.method == 'POST' :
-        form = PasswordChangeForm(request.POST,instance=user.user)
+        form = PasswordChangeForm(request.POST,user=user.user)
         if form.is_valid() :
             form.save()
-            return redirect('profile')
+            return redirect('accounts:profile')
     else :
-        form = PasswordChangeForm(instance=user.user)
+        form = PasswordChangeForm(user= user.user)
         context['form'] = form
         return render(request,'change_password.html',context)

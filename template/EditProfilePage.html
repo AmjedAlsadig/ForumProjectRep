@@ -1,12 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}  
+{% load crispy_forms_tags %}
+
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-10 m-auto">
             <h4>Edit your informatios</h4>
         </div>
-        {{ form }}
+        <div class="row">
+            <div class="col-10 col-md-6 col-lg-4">
+                {{ form.username|as_crispy_field }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="custom-file">
+                     {{ form.avatar|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="custom-file">
+                     {{ form.cover|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col mt-auto">
+                <input type="submit" class="btn btn-success float-right"" value="Submit" style="margin-top: 1em;">
+            </div>
+        
+            <hr class="mt-0 mb-4" style="margin: auto;">
+        </div>
         <h5><a href="{% url 'accounts:changePassword' %}">Change your password</a></h5>
         <input type="submit" class="btn btn-success" value="Submit">
     

@@ -35,11 +35,18 @@ class registerForm(forms.Form):
         if password != password2 :
             raise forms.ValidationError("password does not match")
         return data
-class EditProfileForm(UserChangeForm):
-    class Meta :
+# class EditProfileForm(UserChangeForm):
+#     class Meta :
+#         model = UserProfile
+#         fields = {
+#             'username',
+#             'avatar',
+#             'cover',
+#             "password"
+            
+#         }
+class EditProfileForm(forms.ModelForm):
+    class Meta:
         model = UserProfile
-        fields = {
-            'username',
-            'avatar',
-            "password"
-        }
+        fields = '__all__'
+        # exclude = ('user',)
